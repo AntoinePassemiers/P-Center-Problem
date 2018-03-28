@@ -8,3 +8,6 @@ using JuMP
 using Cbc
 
 
+function solve_p3(d::Array{Array{Int64}}, p::Int64)
+    # TODO
+end

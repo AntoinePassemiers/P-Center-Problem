@@ -9,14 +9,14 @@ using Cbc
 
 
 function solve_p1(d::Array{Array{Int64}}, p::Int64)
-    N = length(distances)
+    N = length(d)
     m = Model(solver=CbcSolver())
 
     # Define variables
     @variables m begin
         x[1:N,1:N], Bin
         y[1:N] >= 0, Bin
-        z >= 0, Int
+        z, Int
     end
 
     # Set objective
@@ -39,18 +39,15 @@ function solve_p1(d::Array{Array{Int64}}, p::Int64)
     @constraint(m, sum(y) <= p)
 
     # Solve p-center problem
+    println("Number of variables  : ", MathProgBase.numvar(m))
+    println("Number of constraints: ", MathProgBase.numconstr(m))
+    println("\nSolving problem...")
     status = solve(m)
-    println("Status: ", status)
+    println("Status    : ", status)
+    # println("Solve time: ", getsolvetime(m))
 
+    y_values = getvalue(y)
     z_value = getvalue(z)
-    println(z_value)
-    println(getvalue(x))
-
-    for i in 1:N
-        for j in 1:N
-
-        end
-    end
-
-    return z_value
+    println("Objective : ", z_value)
+    return y_values, z_value
 end

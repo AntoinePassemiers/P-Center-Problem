@@ -29,4 +29,14 @@ end
 
 
 distances, p = load_instance(FILE_PATH)
-solve_p1(distances, p)
+y, z = solve_p1(distances, p)
+
+# Write solution
+open("out.txt", "w") do f
+    write(f, "Value of the objective function: $z\n\n")
+    for i=1:length(y)
+        if y[i] > 0
+            write(f, "Center at area $i\n")
+        end
+    end
+end
