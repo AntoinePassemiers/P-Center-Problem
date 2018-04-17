@@ -8,6 +8,9 @@ using JuMP
 using Cbc
 
 
-function solve_p3(d::Array{Array{Int64}}, p::Int64)
-    # TODO
+function create_p3(d::Array{Array{Int64}}, p::Int64, solver)
+    N = length(d)
+    model = Model(solver=solver)
+
+
 end

@@ -8,7 +8,7 @@ include("p1.jl")
 include("p3.jl")
 
 
-FILE_PATH = joinpath("instances", "easy/instance10_1_1.dat")
+FILE_PATH = joinpath("instances", "easy/instance10_1_2.dat")
 
 
 function load_instance(file_path::AbstractString)
@@ -29,13 +29,24 @@ end
 
 
 distances, p = load_instance(FILE_PATH)
-y, z = solve_p1(distances, p)
+solver = CbcSolver()
+model, x, y, z = create_p1(distances, p, solver)
+
+# Solve p-center problem
+println("Number of variables  : ", MathProgBase.numvar(model))
+println("Number of constraints: ", MathProgBase.numconstr(model))
+println("\nSolving problem...")
+status = solve(model)
+println("Status    : ", status)
+# println("Solve time: ", getsolvetime(m))
+
+println("Objective : ", getvalue(z))
 
 # Write solution
 open("out.txt", "w") do f
     write(f, "Value of the objective function: $z\n\n")
     for i=1:length(y)
-        if y[i] > 0
+        if getvalue(y[i]) > 0
             write(f, "Center at area $i\n")
         end
     end
