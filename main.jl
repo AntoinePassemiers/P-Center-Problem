@@ -30,24 +30,28 @@ end
 
 distances, p = load_instance(FILE_PATH)
 solver = CbcSolver()
-model, x, y, z = create_p1(distances, p, solver)
+# model, y = create_p1(distances, p, solver)
+model, y = create_p3(distances, p, solver)
 
 # Solve p-center problem
 println("Number of variables  : ", MathProgBase.numvar(model))
 println("Number of constraints: ", MathProgBase.numconstr(model))
 println("\nSolving problem...")
+start_time = time()
 status = solve(model)
-println("Status    : ", status)
-# println("Solve time: ", getsolvetime(m))
+exectime = time() - start_time
+println("Status    : $status")
+println("Solve time: $(@sprintf("%.3f", exectime)) s")
 
-println("Objective : ", getvalue(z))
+obj = getobjectivevalue(model)
+println("Objective : ", obj)
 
 # Write solution
 open("out.txt", "w") do f
-    write(f, "Value of the objective function: $z\n\n")
+    write(f, "Value of the objective function: $obj\n\n")
     for i=1:length(y)
         if getvalue(y[i]) > 0
-            write(f, "Center at area $i\n")
+            write(f, "Center selected at area $i\n")
         end
     end
 end
