@@ -10,12 +10,9 @@ include("p1.jl")
 include("p3.jl")
 
 
-FILE_PATH = joinpath("instances", "easy/instance10_1_2.dat")
-
-
 function load_instance(file_path::AbstractString)
     distances = Array{Int64}[]
-    f = open(FILE_PATH)
+    f = open(file_path)
     lines = readlines(f)
     header = split(replace(lines[1], "\t", " "))
     n_sites = parse(Int64, header[1])
@@ -29,26 +26,16 @@ function load_instance(file_path::AbstractString)
     return distances, max_n_centers
 end
 
-function main()
-    arg_settings = ArgParseSettings(description="P-Center Solver: parameters")
 
-    @add_arg_table arg_settings begin
-        "filepath"
-            help = "Path to the instance file"
-            required = true
-        "form"
-            help = "Formulation of the P-Center Problem"
-            required = true
-            default = "p1"
-    end
-    parsed_args = parse_args(ARGS, arg_settings)
-
-    distances, p = load_instance(FILE_PATH)
+function solve_p_center(filepath::AbstractString, formulation::AbstractString)
+    distances, p = load_instance(filepath)
     solver = CbcSolver()
 
-    if parsed_args["form"] == "p1"
+    if formulation == "p1"
+        println("Using formulation p1")
         model, y = create_p1(distances, p, solver)
-    elseif parsed_args["form"] == "p3"
+    elseif formulation == "p3"
+        println("Using formulation p3")
         model, y = create_p3(distances, p, solver)
     end
 
@@ -67,13 +54,33 @@ function main()
 
     # Write solution
     open("out.txt", "w") do f
-        write(f, "Value of the objective function: $obj \n\n")
+        write(f, "Value of the objective function: $obj \r\n\n")
         for i=1:length(y)
             if getvalue(y[i]) > 0
-                write(f, "Center selected at area $i \n")
+                write(f, "Center selected at area $i \r\n")
             end
         end
     end
+    return model, y, exectime
 end
 
-main()
+
+function main()
+    arg_settings = ArgParseSettings(description="P-Center Solver: parameters")
+
+    @add_arg_table arg_settings begin
+        "filepath"
+            help = "Path to the instance file"
+            required = true
+        "form"
+            help = "Formulation of the P-Center Problem (p1 or p3)"
+            required = true
+            range_tester = (x->x in ["p1", "p3"])
+    end
+    parsed_args = parse_args(ARGS, arg_settings)
+    solve_p_center(parsed_args["filepath"], parsed_args["form"])
+end
+
+if length(ARGS) > 1
+    main()
+end
