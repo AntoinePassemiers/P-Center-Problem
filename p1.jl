@@ -5,12 +5,12 @@
 __precompile__()
 
 using JuMP
-using Cbc
 
 
 function create_p1(d::Array{Array{Int64}}, p::Int64, solver)
-    N = length(d)
     model = Model(solver=solver)
+
+    N::Int64 = length(d)
 
     # Define variables
     @variables model begin

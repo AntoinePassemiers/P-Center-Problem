@@ -5,6 +5,9 @@
 __precompile__()
 
 using ArgParse
+using Cbc
+using GLPKMathProgInterface
+
 
 include("p1.jl")
 include("p3.jl")
@@ -27,14 +30,20 @@ function load_instance(file_path::AbstractString)
 end
 
 
-function solve_p_center(filepath::AbstractString, formulation::AbstractString)
-    distances, p = load_instance(filepath)
-    solver = CbcSolver()
+function solve_p_center(parameters::Dict{String, Any})
+    println("Loading instance from ", parameters["filepath"])
+    distances, p = load_instance(parameters["filepath"])
 
-    if formulation == "p1"
+    if parameters["solver"] == "cbc"
+        solver = CbcSolver()
+    elseif parameters["solver"] == "glpk"
+        solver = GLPKSolverMIP()
+    end
+
+    if parameters["form"] == "p1"
         println("Using formulation p1")
         model, y = create_p1(distances, p, solver)
-    elseif formulation == "p3"
+    elseif parameters["form"] == "p3"
         println("Using formulation p3")
         model, y = create_p3(distances, p, solver)
     end
@@ -42,7 +51,7 @@ function solve_p_center(filepath::AbstractString, formulation::AbstractString)
     # Solve p-center problem
     println("Number of variables  : ", MathProgBase.numvar(model))
     println("Number of constraints: ", MathProgBase.numconstr(model))
-    println("\nSolving problem...")
+    println("Solving problem...")
     start_time = time()
     status = solve(model)
     exectime = time() - start_time
@@ -50,7 +59,7 @@ function solve_p_center(filepath::AbstractString, formulation::AbstractString)
     println("Solve time: $(@sprintf("%.3f", exectime)) s")
 
     obj = getobjectivevalue(model)
-    println("Objective : ", obj)
+    println("Objective : $obj \n")
 
     # Write solution
     open("out.txt", "w") do f
@@ -76,9 +85,14 @@ function main()
             help = "Formulation of the P-Center Problem (p1 or p3)"
             required = true
             range_tester = (x->x in ["p1", "p3"])
+        "--solver"
+            help = "Solver (either cbc or glpk)"
+            required = false
+            default = "cbc"
+            range_tester = (x->x in ["cbc", "glpk"])
     end
     parsed_args = parse_args(ARGS, arg_settings)
-    solve_p_center(parsed_args["filepath"], parsed_args["form"])
+    solve_p_center(parsed_args)
 end
 
 if length(ARGS) > 1

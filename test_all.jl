@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
-# test_all.jl
+# test_all.jl: Run solver on all instances and save execution times
 # authors : Antoine Passemiers, Cedric Simar
 
 include("solve.jl")
+
+
+EASY_ONLY = true
 
 
 function get_instance_filepaths(folder)
@@ -10,35 +13,49 @@ function get_instance_filepaths(folder)
     return [joinpath(folder, filename) for filename in filenames]
 end
 
-formulations = ["p1", "p3"]
-easy_files = get_instance_filepaths("instances/easy")
-hard_files = get_instance_filepaths("instances/hard")
-files = [easy_files; hard_files]
-n_instances = length(files)
+function save_Nx2matrix(mat, filepath)
+    nrows, ncols = size(mat)
+    open(filepath, "w") do f
+        for i=1:nrows
+            o1 = mat[i, 1]
+            o2 = mat[i, 2]
+            write(f, "$o1    $o2 \r\n")
+        end
+    end
+end
 
+formulations = ["p1", "p3"]
+solvers = ["cbc", "glpk"]
+
+easy_files = get_instance_filepaths("instances/easy")
+if EASY_ONLY
+    files = easy_files
+else
+    hard_files = get_instance_filepaths("instances/hard")
+    files = [easy_files; hard_files]
+end
+
+n_instances = length(files)
 exectimes = Array{Float64}(n_instances, 2)
 obj = Array{Int64}(n_instances, 2)
 
-for i = 1:n_instances
-    for k = 1:2
-        model, y, exectime = solve_p_center(files[i], formulations[k])
-        exectimes[i, k] = exectime
-        obj[i, k] = round(getobjectivevalue(model))
-    end
+if isdir("results") == false
+    mkdir("results")
 end
 
-open("results/times.txt", "w") do f
-    for i=1:n_instances
-        t1 = exectimes[i, 1]
-        t2 = exectimes[i, 2]
-        write(f, "$t1    $t2 \r\n")
+for solver in solvers
+    for i = 1:n_instances
+        for k = 1:2
+            parameters = Dict{String, Any}(
+                "filepath"=>files[i],
+                "form"=>formulations[k],
+                "solver"=>solver)
+            model, y, exectime = solve_p_center(parameters)
+            exectimes[i, k] = exectime
+            obj[i, k] = round(getobjectivevalue(model))
+        end
     end
-end
 
-open("results/obj.txt", "w") do f
-    for i=1:n_instances
-        o1 = obj[i, 1]
-        o2 = obj[i, 2]
-        write(f, "$o1    $o2 \r\n")
-    end
+    save_Nx2matrix(exectimes, "results/times_$solver.txt")
+    save_Nx2matrix(obj, "results/obj_$solver.txt")
 end

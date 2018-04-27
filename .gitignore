@@ -1,1 +1,7 @@
+*.pyc
+*.pyd
+
 out.txt
+
+build/
+__pycache__/
