@@ -7,7 +7,7 @@ __precompile__()
 using JuMP
 
 
-function create_p3(d::Array{Array{Int64}}, p::Int64, solver)
+function create_p3(d::Array{Array{Int64}}, p::Int64, solver::Any)
     model = Model(solver=solver)
 
     N::Int64 = length(d)    # Number of nodes
@@ -17,14 +17,9 @@ function create_p3(d::Array{Array{Int64}}, p::Int64, solver)
     sort!(rho)
     T::Int64 = length(rho)
 
-    a = Array{Int64}(N, M, T)
-    # TODO: vectorize comparison?
-    for i = 1:N
-        for j = 1:M
-            for k = 1:T
-                a[i, j, k] = (d[i][j] <= rho[k])
-            end
-        end
+    a::Array{Int64} = Array{Int64}(N, M, T)
+    for i = 1:N, j = 1:M, k = 1:T
+        a[i, j, k] = (d[i][j] <= rho[k])
     end
 
     # Define variables
@@ -37,14 +32,12 @@ function create_p3(d::Array{Array{Int64}}, p::Int64, solver)
     @objective(model, Min, sum(rho[k]*z[k] for k=1:T))
 
     # Define constraints
-    for i = 1:N
-        for k = 1:T
-            # Constraints group 15
-            #    sum_j a[i, j, k]*y[j] >= z[k]
-            #    For each selected vertex, there is at least 
-            #    one center that covers it within radius k
-            @constraint(model, sum(a[i, j, k]*y[j] for j=1:M) >= z[k])
-        end
+    for i = 1:N, k = 1:T
+        # Constraints group 15
+        #    sum_j a[i, j, k]*y[j] >= z[k]
+        #    For each selected vertex, there is at least 
+        #    one center that covers it within radius k
+        @constraint(model, sum(a[i, j, k]*y[j] for j=1:M) >= z[k])
     end
     # Constraint 16
     #    sum_j y[j] <= p

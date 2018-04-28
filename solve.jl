@@ -38,6 +38,8 @@ function solve_p_center(parameters::Dict{String, Any})
         solver = CbcSolver()
     elseif parameters["solver"] == "glpk"
         solver = GLPKSolverMIP()
+    else
+        error("Formulation must be either cbc or glpk")
     end
 
     if parameters["form"] == "p1"
@@ -46,6 +48,8 @@ function solve_p_center(parameters::Dict{String, Any})
     elseif parameters["form"] == "p3"
         println("Using formulation p3")
         model, y = create_p3(distances, p, solver)
+    else
+        error("Formulation must be either p1 or p3")
     end
 
     # Solve p-center problem
@@ -61,8 +65,17 @@ function solve_p_center(parameters::Dict{String, Any})
     obj = getobjectivevalue(model)
     println("Objective : $obj \n")
 
+    # Create results folder if not exists
+    if isdir("results") == false
+        mkdir("results")
+    end
+
     # Write solution
-    open("out.txt", "w") do f
+    results_path::AbstractString = string(
+        splitext(basename(parameters["filepath"]))[1], "_",
+        parameters["form"], "_",
+        parameters["solver"], ".txt")
+    open(joinpath("results", results_path), "w") do f
         write(f, "Value of the objective function: $obj \r\n\n")
         for i=1:length(y)
             if getvalue(y[i]) > 0

@@ -1,0 +1,3 @@
+Value of the objective function: 75.0 
+
+Center selected at area 7 

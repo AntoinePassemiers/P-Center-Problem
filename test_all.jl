@@ -8,12 +8,12 @@ include("solve.jl")
 EASY_ONLY = true
 
 
-function get_instance_filepaths(folder)
+function get_instance_filepaths(folder::AbstractString)
     filenames = filter(x->contains(x, ".dat"), readdir(folder))
     return [joinpath(folder, filename) for filename in filenames]
 end
 
-function save_Nx2matrix(mat, filepath)
+function save_Nx2matrix(mat::Array{Float64}, filepath::AbstractString)
     nrows, ncols = size(mat)
     open(filepath, "w") do f
         for i=1:nrows
@@ -39,21 +39,20 @@ n_instances = length(files)
 exectimes = Array{Float64}(n_instances, 2)
 obj = Array{Int64}(n_instances, 2)
 
+# Create results folder if not exists
 if isdir("results") == false
     mkdir("results")
 end
 
 for solver in solvers
-    for i = 1:n_instances
-        for k = 1:2
-            parameters = Dict{String, Any}(
-                "filepath"=>files[i],
-                "form"=>formulations[k],
-                "solver"=>solver)
-            model, y, exectime = solve_p_center(parameters)
-            exectimes[i, k] = exectime
-            obj[i, k] = round(getobjectivevalue(model))
-        end
+    for i = 1:n_instances, k = 1:2
+        parameters = Dict{String, Any}(
+            "filepath"=>files[i],
+            "form"=>formulations[k],
+            "solver"=>solver)
+        model, y, exectime = solve_p_center(parameters)
+        exectimes[i, k] = exectime
+        obj[i, k] = round(getobjectivevalue(model))
     end
 
     save_Nx2matrix(exectimes, "results/times_$solver.txt")

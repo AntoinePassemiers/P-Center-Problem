@@ -7,7 +7,7 @@ __precompile__()
 using JuMP
 
 
-function create_p1(d::Array{Array{Int64}}, p::Int64, solver)
+function create_p1(d::Array{Array{Int64}}, p::Int64, solver::Any)
     model = Model(solver=solver)
 
     N::Int64 = length(d)
