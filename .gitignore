@@ -1,5 +1,9 @@
 *.pyc
 *.pyd
 
+*.txt
+
+results/
+
 build/
 __pycache__/
