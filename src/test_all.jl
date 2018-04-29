@@ -7,7 +7,7 @@ include("solve.jl")
 
 implementations = ["p1", "p3", "p3-binary", "p3-db3"]
 solvers = ["cbc", "glpk"]
-EASY_ONLY = false
+EASY_ONLY = true
 
 
 function get_instance_filepaths(folder::AbstractString)
@@ -15,13 +15,19 @@ function get_instance_filepaths(folder::AbstractString)
     return [joinpath(folder, filename) for filename in filenames]
 end
 
-function save_Nx2matrix(mat::Array{Float64}, filepath::AbstractString)
+function save_Nx2matrix(mat::Array{Float64},
+                        filenames::Any,
+                        dest::AbstractString)
     nrows, ncols = size(mat)
-    open(filepath, "w") do f
-        for i=1:nrows
-            o1 = mat[i, 1]
-            o2 = mat[i, 2]
-            write(f, "$o1    $o2 \r\n")
+    open(dest, "w") do f
+        write(f, string(implementations), "\r\n")
+        for i = 1:nrows
+            name = basename(filenames[i])
+            write(f, "$name    ")
+            for j = 1:length(implementations)
+                write(f, string(mat[i, j]), "    ")
+            end
+            write(f, "\r\n")
         end
     end
 end
@@ -35,8 +41,8 @@ else
 end
 
 n_instances = length(files)
-exectimes = Array{Float64}(n_instances, 2)
-obj = Array{Float64}(n_instances, 2)
+exectimes = Array{Float64}(n_instances, length(implementations))
+obj = Array{Float64}(n_instances, length(implementations))
 
 # Create results folder if not exists
 if isdir("../results") == false
@@ -44,7 +50,7 @@ if isdir("../results") == false
 end
 
 for solver in solvers
-    for i = 1:n_instances, k = 1:2
+    for i = 1:n_instances, k = 1:length(implementations)
         parameters = Dict{String, Any}(
             "filepath"=>files[i],
             "form"=>implementations[k],
@@ -54,6 +60,6 @@ for solver in solvers
         obj[i, k] = round(getobjectivevalue(model))
     end
 
-    save_Nx2matrix(exectimes, "../results/times_$solver.txt")
-    save_Nx2matrix(obj, "../results/obj_$solver.txt")
+    save_Nx2matrix(exectimes, files, "../results/times_$solver.txt")
+    save_Nx2matrix(obj, files, "../results/obj_$solver.txt")
 end
