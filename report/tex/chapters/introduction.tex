@@ -1,0 +1,8 @@
+\chapter{Introduction}
+For this project, we chose to implement the problem described in the statement entitled ``The \textit{p}-Center Problem \#1'', i.e. the vertex restricted \textit{p}-center problem, an optimization problem that requires the location of \textit{p} centers on the vertices of a given network and the allocation of the nodes to the selected centers in order to minimize the distance between the nodes and their assigned centers. In the case of tree networks, low order polynomial time algorithms exist to solve the \textit{p}-center problem. However, for general networks, the problem is NP-hard.\\
+
+The formal definition of the problem is provided in the project statement as follows: ``Let $G = \left( N, E\right)$ be a given network with vertex set $N = \lbrace 1, ..., n\rbrace$ and edge set $E$. Define $d_{ij}$ as the length of a shortest path from vertex $i \in N$ to vertex $j \in N$ in the given network and $f\left(X\right) = \max_{i \in N} \min_{x \in X} d_{xi}$ for any point set $X \subset G$. Then, the vertex restricted \textit{p}-center problem is to find a set $X^{*} \subseteq N$ with $|X^{*}| = p$ so that $f\left(X^{*}\right) \leq f\left(X\right)$ for any $X \subseteq N$ with $|X| = p$''.\\
+
+In order to solve the vertex restricted \textit{p}-center problem, this work implements two integer programming (IP) formulations, i.e. a first formulation (P1) proposed by Daskin (1995) and a second formulation (P3) proposed by Calik and Tansel (2013).\\
+
+In this report, we will first describe both P1 and P3 mathematical formulations, our computational experiments as well as discuss the results obtained using two different solvers interfaced by the JuMP modeling language.

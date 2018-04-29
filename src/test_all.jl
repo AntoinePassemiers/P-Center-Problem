@@ -27,21 +27,21 @@ end
 formulations = ["p1", "p3"]
 solvers = ["cbc", "glpk"]
 
-easy_files = get_instance_filepaths("instances/easy")
+easy_files = get_instance_filepaths("../instances/easy")
 if EASY_ONLY
     files = easy_files
 else
-    hard_files = get_instance_filepaths("instances/hard")
+    hard_files = get_instance_filepaths("../instances/hard")
     files = [easy_files; hard_files]
 end
 
 n_instances = length(files)
 exectimes = Array{Float64}(n_instances, 2)
-obj = Array{Int64}(n_instances, 2)
+obj = Array{Float64}(n_instances, 2)
 
 # Create results folder if not exists
-if isdir("results") == false
-    mkdir("results")
+if isdir("../results") == false
+    mkdir("../results")
 end
 
 for solver in solvers
@@ -55,6 +55,6 @@ for solver in solvers
         obj[i, k] = round(getobjectivevalue(model))
     end
 
-    save_Nx2matrix(exectimes, "results/times_$solver.txt")
-    save_Nx2matrix(obj, "results/obj_$solver.txt")
+    save_Nx2matrix(exectimes, "../results/times_$solver.txt")
+    save_Nx2matrix(obj, "../results/obj_$solver.txt")
 end
