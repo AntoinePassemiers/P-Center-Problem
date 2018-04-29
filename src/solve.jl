@@ -42,23 +42,20 @@ function solve_p_center(parameters::Dict{String, Any})
         error("Formulation must be either cbc or glpk")
     end
 
+    start_time = time()
     if parameters["form"] == "p1"
         println("Using formulation p1")
-        model, y = create_p1(distances, p, solver)
+        model, y, status = solve_p1(distances, p, solver)
     elseif parameters["form"] == "p3"
         println("Using formulation p3")
-        model, y = create_p3(distances, p, solver)
+        model, y, status = solve_p3(distances, p, solver)
     else
         error("Formulation must be either p1 or p3")
     end
+    exectime = time() - start_time
 
-    # Solve p-center problem
     println("Number of variables  : ", MathProgBase.numvar(model))
     println("Number of constraints: ", MathProgBase.numconstr(model))
-    println("Solving problem...")
-    start_time = time()
-    status = solve(model)
-    exectime = time() - start_time
     println("Status    : $status")
     println("Solve time: $(@sprintf("%.3f", exectime)) s")
 
