@@ -1,0 +1,67 @@
+\chapter{Mathematical Formulations}
+\section{P1}
+The P1 formulation to solve the vertex restricted \textit{p}-center problem was proposed by Daskin (1995).
+\subsection{Constants}
+Let:
+\begin{itemize}
+	\item $G = \left( N, E\right)$ be a given network
+	\item $N = \lbrace 1, ..., n\rbrace$ be the vertex set of $G$
+	\item $E$ be the edge set of $G$ (not used in the vertex restricted \textit{p}-center problem)
+	\item $d_{ij} \in \mathbb{N}^+$ be the length of a shortest path in $G$ from vertex $i \in N$ to vertex $j \in N$
+	\item $p \in \mathbb{N}^+$ be the maximum number of centers
+\end{itemize}
+\subsection{Variables}
+Let:
+\begin{itemize}
+	\item $x_{ij} \in \lbrace 0, 1\rbrace$ be $1$ if vertex $i$ assigns to a center placed at vertex $j$, $0$ otherwise
+	\item $y_{j} \in \lbrace 0, 1\rbrace$ be $1$ if a center is placed at vertex $j$, $0$ otherwise
+\end{itemize}
+\subsection{Objective function and constraints}
+The objective is to minimize\\ $$z$$\\ with respect to the variables $x_{ij}$ and $y_{j}$ under the following constraints:\\
+
+\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\textwidth}{l l X}
+$\sum\limits_{j \in N} d_{ij} x_{ij}\leq z$ & $\forall i \in N$ & ensures that the objective value is no less than the maximum vertex-to-center distance \\
+$\sum\limits_{j \in N} x_{ij} = 1$ & $\forall i \in N$ & assigns each vertex to exactly one center \\
+$x_{ij} \leq y_j$ & $\forall i, j \in N$ & ensures that no vertex assigns to vertex $j$ unless there is a center \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ at vertex $j$ \\
+$\sum\limits_{j \in N} y_{j} \leq p$ & & restricts the number of centers to at most p \\
+$y_{j} \in \lbrace 0, 1\rbrace$ & $\forall j \in N$ & binary restriction \\
+$x_{ij} \in \lbrace 0, 1\rbrace$ & $\forall i, j \in N$ & binary restriction 
+\end{tabularx}
+
+\section{P3}
+The P3 formulation to solve the \textit{p}-center problem was proposed by Calik and Tansel (2013). P3 is based on a previous Integer Programming formulation (P2) by Elloumi et al. (2004). We note that P3 extends P1 formulation to \textit{p}-FC, i.e. the F-restricted \textit{p}-center problem with $F$ being any finite subset of $G$,  by replacing ``$j \in N$'' by ``$j \in M$''. P3 used a set-covering based approach that takes advantage of the fact that the distances $d_{ij}$ are the only possible values for $r_p(F)$, i.e. the optimal p-radii of the F-restricted p-centers. This approach led to reduce the number of constraints from 6 (P1) to 5 (P2 and P3), thus improving performances. 
+
+\subsection{Constants}
+Let:
+\begin{itemize}
+	\item $G = \left( N, E\right)$ be a given network
+	\item $E$ be the edge set of $G$ (not used in the F-restricted \textit{p}-center problem)
+	\item $F$ be any finite subset of $G$
+	\item $N = \lbrace 1, ..., n\rbrace$ be the vertex set of $G$
+	\item $M = \lbrace 1, ..., m\rbrace$ be the vertex set of $F$ (in P1, $m = n$)
+	\item $f_j$ be an enumeration of the points in $F$, $j \in M$
+	\item $d_{ij} \in \mathbb{N}^+$ be the length of a shortest path in $G$ from vertex $i \in N$ to vertex $j \in M$
+	\item $p \in \mathbb{N}^+$ be the maximum number of centers
+	\item $\rho_1 < \rho_2 < ... < \rho_K$ be an ordering of the $K$ distinct distance values of the $d_{ij}$ matrix
+	\item $R = \lbrace \rho_1, \rho_2, ..., \rho_K \rbrace$ be the set of ordered $\rho$ values
+	\item $k \in T \equiv \lbrace 1, ..., K\rbrace$ be an index of a $\rho$ value
+	\item $a_{ijk} \in \lbrace 0, 1\rbrace$ be $1$ if $d_{ij} \leq \rho_k$, $0$ otherwise
+\end{itemize}
+\subsection{Variables}
+Let:
+\begin{itemize}
+	\item $z_{k} \in \lbrace 0, 1\rbrace$ be $1$ if $r_p(F) = \rho_k$, $0$ otherwise
+	\item $y_{j} \in \lbrace 0, 1\rbrace$ be $1$ if a center is placed at site $f_j$, $0$ otherwise
+\end{itemize}
+\subsection{Objective function and constraints}
+The objective is to minimize\\ $$\sum\limits_{k \in T} \rho_k z_k$$\\ with respect to the variables $z_{k}$ and $y_{j}$ under the following constraints:\\
+
+\renewcommand{\arraystretch}{2}
+\begin{tabularx}{\textwidth}{l l X}
+$\sum\limits_{j \in M} a_{ijk} y_j \geq z_k$ & $\forall i \in N, \forall k \in T$ & ensures that each vertex is covered within the selected radius by at least one center \\
+$\sum\limits_{j \in M} y_j \leq p$ & & restricts the number of centers to at most p \\
+$\sum\limits_{k \in T} z_k = 1$ & & ensures that exactly one of the variables $z_k$ is selected as $1$ while the objective function determines the value $r_p(F)$ as the corresponding value $\rho_k$ \\
+$y_{j} \in \lbrace 0, 1\rbrace$ & $\forall j \in M$ & binary restriction \\
+$z_k \in \lbrace 0, 1\rbrace$ & $\forall k \in T$ & binary restriction 
+\end{tabularx}

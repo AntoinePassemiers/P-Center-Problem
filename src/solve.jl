@@ -66,8 +66,8 @@ function solve_p_center(parameters::Dict{String, Any})
     println("Objective : $obj \n")
 
     # Create results folder if not exists
-    if isdir("results") == false
-        mkdir("results")
+    if isdir("../results") == false
+        mkdir("../results")
     end
 
     # Write solution
@@ -75,7 +75,7 @@ function solve_p_center(parameters::Dict{String, Any})
         splitext(basename(parameters["filepath"]))[1], "_",
         parameters["form"], "_",
         parameters["solver"], ".txt")
-    open(joinpath("results", results_path), "w") do f
+    open(joinpath("../results", results_path), "w") do f
         write(f, "Execution time: $exectime \r\n\n")
         write(f, "Value of the objective function: $obj \r\n\n")
         for i=1:length(y)

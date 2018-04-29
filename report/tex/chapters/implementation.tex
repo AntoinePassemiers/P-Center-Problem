@@ -1,0 +1,45 @@
+\chapter{Implementation}
+
+The project was implemented exclusively in Julia v0.6.2, a high-level dynamic programming language as requested in the assignment guidelines. In addition to the requested default use of the open-source Coin-OR Branch-and-Cut solver (Cbc), our implementation also offers the possibility to compare the results and performance of Cbc with the GNU Linear Programming Kit (GLPK), another solver interfaced by JuMP.
+
+\section{Project Structure}
+
+The source folder of the project is structured as follows:
+\begin{itemize}
+\item the \verb+instances+ folder contains:
+	\begin{itemize}
+	\item a folder \verb+easy+ containing the easy instances provided with the assignment
+	\item a folder \verb+hard+ containing the hard instances provided with the assignment
+	\end{itemize}
+\item the \verb+report+ folder contains the report in pdf and LaTeX formats
+\item the \verb+results+ folder contains the results (objective and elapsed time) of the program execution on the selected instances
+\item the \verb+src+ folder contains the source files in Julia
+\end{itemize}
+
+\section{Execution}
+
+\subsection{Extra modules}
+In order to properly run the project, several modules have first to be installed using the following commands in a Julia environment:
+\begin{itemize}
+	\item \verb+Pkg.add("ArgParse")+
+	\item \verb+Pkg.add("Cbc")+
+	\item \verb+Pkg.add("GLPKMathProgInterface")+
+	\item \verb+Pkg.add("JuMP")+
+\end{itemize}
+
+\subsection{Arguments}
+The project can be executed using two different scripts:
+\begin{itemize}
+	\item \verb+julia test_all.jl+ is used without argument, runs the two Cbc and GLPK solvers on all instances and writes the minimized objective function value and performance result of each instance in respective files in the \verb+results+ folder.
+	\item \verb+julia solve.jl+ is used with the following arguments:
+		\begin{itemize}
+		\item path to the instance file (required)
+		\item formulation of the p-center problem (either \verb+p1+ or \verb+p3+) (required)
+		\item solver (either \verb+cbc+ or \verb+glpk+) (optional, using \verb+--solver+)
+		\end{itemize}
+	For example: the following command
+	\begin{center}
+		\verb+julia solve.jl ./instances/easy/instance10_1_1.dat p1 --solver glpk+
+	\end{center}	 
+	runs the \verb+solve.jl+ script to solve a unique instance \verb+instance10_1_1.dat+ using the GLPK solver with the P1 formulation. 
+\end{itemize}
