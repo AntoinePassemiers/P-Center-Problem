@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# p1.jl
+# p1.jl: Formulation p1
 # authors : Antoine Passemiers, Cedric Simar
 
 __precompile__()
