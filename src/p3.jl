@@ -135,10 +135,10 @@ function solve_p3(d::Array{Array{Int64}}, p::Int64, solver::Any)
         status = solve(model)
         println(status)
         if status == :Infeasible
+            _min = _max
             break
         else
             obj = convert(Int64, round(getobjectivevalue(model)))
-            println("obj : ", obj)
             if obj == rho[_a]
                 _max = _a
             elseif obj == rho[_b]
