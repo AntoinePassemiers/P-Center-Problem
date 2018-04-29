@@ -47,7 +47,7 @@ function solve_p_center(parameters::Dict{String, Any})
         model, y = create_p1(distances, p, solver)
     elseif parameters["form"] == "p3"
         println("Using formulation p3")
-        model, y = create_p3(distances, p, solver, 8, typemax(Int64))
+        model, y = create_p3(distances, p, solver)
     else
         error("Formulation must be either p1 or p3")
     end
