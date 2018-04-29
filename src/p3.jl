@@ -66,7 +66,28 @@ function create_rph(p::Int64,
 end
 
 
-function create_p3_with_BINARY(d::Array{Array{Int64}}, p::Int64, solver::Any)
+function solve_p3(d::Array{Array{Int64}}, p::Int64, solver::Any)
+    # Flatten the distance matrix, keep only radii comprised between
+    # UB and LB, and sort the values
+    rho::Array{Int64} = unique(Iterators.flatten(d))
+    sort!(rho)
+
+    N::Int64 = length(d)    # Number of nodes
+    M::Int64 = length(d[1]) # Number of possible centers
+    T::Int64 = length(rho)
+
+    a::Array{Int64} = Array{Int64}(N, M, T)
+    for i = 1:N, j = 1:M, k = 1:T
+        a[i, j, k] = (d[i][j] <= rho[k])
+    end
+
+    model, y = formulation_3(p, solver, rho, a)
+    status = solve(model)
+    return model, y, status
+end
+
+
+function solve_p3_with_BINARY(d::Array{Array{Int64}}, p::Int64, solver::Any)
     # Flatten the distance matrix, keep only radii comprised between
     # UB and LB, and sort the values
     rho::Array{Int64} = unique(Iterators.flatten(d))
@@ -105,12 +126,14 @@ function create_p3_with_BINARY(d::Array{Array{Int64}}, p::Int64, solver::Any)
         a[i, j, k] = (d[i][j] <= rho[k])
     end
 
-    return formulation_3(p, solver, rho, a)
+    model, y = formulation_3(p, solver, rho, a)
+    status = solve(model)
+    return model, y, status
 end
 
 
 
-function solve_p3(d::Array{Array{Int64}}, p::Int64, solver::Any)
+function solve_p3_with_DB3(d::Array{Array{Int64}}, p::Int64, solver::Any)
     # Flatten the distance matrix, keep only radii comprised between
     # UB and LB, and sort the values
     rho::Array{Int64} = unique(Iterators.flatten(d))
@@ -150,10 +173,6 @@ function solve_p3(d::Array{Array{Int64}}, p::Int64, solver::Any)
         end
     end
 
-    println(_min)
-    println(_max)
-    println(size(rho))
-    println(size(rho[_min:_max]))
     model, y = formulation_3(p, solver, rho[_min:_max], a[:, :, _min:_max])
     status = solve(model)
     return model, y, status

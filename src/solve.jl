@@ -13,6 +13,9 @@ include("p1.jl")
 include("p3.jl")
 
 
+IMPLEMENTATIONS = ["p1", "p3", "p3-binary", "p3-db3"]
+
+
 function load_instance(file_path::AbstractString)
     distances = Array{Int64}[]
     f = open(file_path)
@@ -49,6 +52,12 @@ function solve_p_center(parameters::Dict{String, Any})
     elseif parameters["form"] == "p3"
         println("Using formulation p3")
         model, y, status = solve_p3(distances, p, solver)
+    elseif parameters["form"] == "p3-binary"
+        println("Using formulation p3 and BINARY algorithm")
+        model, y, status = solve_p3_with_BINARY(distances, p, solver)
+    elseif parameters["form"] == "p3-db3"
+        println("Using formulation p3 and DB3 algorithm")
+        model, y, status = solve_p3_with_DB3(distances, p, solver)
     else
         error("Formulation must be either p1 or p3")
     end
@@ -95,7 +104,7 @@ function main()
         "form"
             help = "Formulation of the P-Center Problem (p1 or p3)"
             required = true
-            range_tester = (x->x in ["p1", "p3"])
+            range_tester = (x->x in IMPLEMENTATIONS)
         "--solver"
             help = "Solver (either cbc or glpk)"
             required = false

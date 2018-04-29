@@ -5,7 +5,9 @@
 include("solve.jl")
 
 
-EASY_ONLY = true
+implementations = ["p1", "p3", "p3-binary", "p3-db3"]
+solvers = ["cbc", "glpk"]
+EASY_ONLY = false
 
 
 function get_instance_filepaths(folder::AbstractString)
@@ -23,9 +25,6 @@ function save_Nx2matrix(mat::Array{Float64}, filepath::AbstractString)
         end
     end
 end
-
-formulations = ["p1", "p3"]
-solvers = ["cbc", "glpk"]
 
 easy_files = get_instance_filepaths("../instances/easy")
 if EASY_ONLY
@@ -48,7 +47,7 @@ for solver in solvers
     for i = 1:n_instances, k = 1:2
         parameters = Dict{String, Any}(
             "filepath"=>files[i],
-            "form"=>formulations[k],
+            "form"=>implementations[k],
             "solver"=>solver)
         model, y, exectime = solve_p_center(parameters)
         exectimes[i, k] = exectime
