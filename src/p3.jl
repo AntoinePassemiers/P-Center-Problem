@@ -7,7 +7,8 @@ __precompile__()
 using JuMP
 
 
-function create_rph(p::Int64, 
+function create_rph(d::Array{Array{Int64}},
+                    p::Int64,
                     solver::Any,
                     rho::Array{Int64},
                     a::Array{Int64},
@@ -63,12 +64,12 @@ function create_p3(d::Array{Array{Int64}}, p::Int64, solver::Any)
     min_h::Int64 = 1
     max_h::Int64 = T
     LB::Int64 = typemax(Int64)
-    while max_h - min_h >= 1
+    while max_h - min_h > 1
         mid::Int64 = convert(Int64, floor((min_h + max_h) / 2))
-        RPh = create_rph(p, solver, rho, a, mid)
+        RPh = create_rph(d, p, solver, rho, a, mid)
         status = solve(RPh)
         println(status)
-        if status == "Infeasible"
+        if status == :Infeasible
             min_h = mid
         else
             max_h = mid
