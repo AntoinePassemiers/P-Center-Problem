@@ -228,13 +228,11 @@ function solve_p3_with_DB3(d::Array{Array{Int64}}, p::Int64, solver::Any)
     while _max - _min >= 1
         _a::Int64 = _min + convert(Int64, floor((_max - _min) / 3))
         _b::Int64 = _min + 2 * convert(Int64, floor((_max - _min) / 3))
-        println(size(a[:, :, [_a, _b]]))
         model, _ = formulation_3(p, solver, rho[[_a, _b]], a[:, :, [_a, _b]])
         status = solve(model)
         println(status)
         if status == :Infeasible
-            _min = _max
-            break
+            _min = _b + 1
         else
             obj = convert(Int64, round(getobjectivevalue(model)))
             if obj == rho[_a]
