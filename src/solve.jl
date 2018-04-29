@@ -77,10 +77,10 @@ function solve_p_center(parameters::Dict{String, Any})
     end
 
     # Write solution
-    results_path::AbstractString = string(
+    results_path::AbstractString = replace(string(
         splitext(basename(parameters["filepath"]))[1], "_",
         parameters["form"], "_",
-        parameters["solver"], ".txt")
+        parameters["solver"], ".txt"), "-", "_")
     open(joinpath("../results", results_path), "w") do f
         write(f, "Execution time: $exectime \r\n\n")
         write(f, "Value of the objective function: $obj \r\n\n")
