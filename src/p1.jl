@@ -7,6 +7,17 @@ __precompile__()
 using JuMP
 
 
+"""
+    solve_p1(d, p, solver)
+
+Create a P1 formulation and solve it as an integer program.
+Return the model, the array y of variables and the solve status.
+
+# Arguments
+- `d::Int64`: distance matrix of dimensionality 2.
+- `p::Int64`: the maximum number of selected centers.
+- `solver::Any`: a reference to a JuMP-compatible solver (either Cbc or GLPK).
+"""
 function solve_p1(d::Array{Array{Int64}}, p::Int64, solver::Any)
     model = Model(solver=solver)
 
@@ -15,7 +26,7 @@ function solve_p1(d::Array{Array{Int64}}, p::Int64, solver::Any)
     # Define variables
     @variables model begin
         x[1:N,1:N], Bin
-        y[1:N] >= 0, Bin
+        y[1:N], Bin
         z, Int
     end
 
