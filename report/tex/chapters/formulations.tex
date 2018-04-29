@@ -20,13 +20,13 @@ Let:
 The objective is to minimize\\ $$z$$\\ with respect to the variables $x_{ij}$ and $y_{j}$ under the following constraints:\\
 
 \renewcommand{\arraystretch}{2}
-\begin{tabularx}{\textwidth}{l l X}
-$\sum\limits_{j \in N} d_{ij} x_{ij}\leq z$ & $\forall i \in N$ & ensures that the objective value is no less than the maximum vertex-to-center distance \\
-$\sum\limits_{j \in N} x_{ij} = 1$ & $\forall i \in N$ & assigns each vertex to exactly one center \\
-$x_{ij} \leq y_j$ & $\forall i, j \in N$ & ensures that no vertex assigns to vertex $j$ unless there is a center \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ at vertex $j$ \\
-$\sum\limits_{j \in N} y_{j} \leq p$ & & restricts the number of centers to at most p \\
-$y_{j} \in \lbrace 0, 1\rbrace$ & $\forall j \in N$ & binary restriction \\
-$x_{ij} \in \lbrace 0, 1\rbrace$ & $\forall i, j \in N$ & binary restriction 
+\begin{tabularx}{\textwidth}{l l X r}
+$\sum\limits_{j \in N} d_{ij} x_{ij}\leq z$ & $\forall i \in N$ & ensures that the objective value is no less than the maximum vertex-to-center distance & (1)\\
+$\sum\limits_{j \in N} x_{ij} = 1$ & $\forall i \in N$ & assigns each vertex to exactly one center & (2)\\
+$x_{ij} \leq y_j$ & $\forall i, j \in N$ & ensures that no vertex assigns to vertex $j$ unless there is a center \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ at vertex $j$ & (3)\\
+$\sum\limits_{j \in N} y_{j} \leq p$ & & restricts the number of centers to at most p & (4)\\
+$y_{j} \in \lbrace 0, 1\rbrace$ & $\forall j \in N$ & binary restriction & (5)\\
+$x_{ij} \in \lbrace 0, 1\rbrace$ & $\forall i, j \in N$ & binary restriction  & (6)
 \end{tabularx}
 
 \section{P3}
@@ -58,10 +58,10 @@ Let:
 The objective is to minimize\\ $$\sum\limits_{k \in T} \rho_k z_k$$\\ with respect to the variables $z_{k}$ and $y_{j}$ under the following constraints:\\
 
 \renewcommand{\arraystretch}{2}
-\begin{tabularx}{\textwidth}{l l X}
-$\sum\limits_{j \in M} a_{ijk} y_j \geq z_k$ & $\forall i \in N, \forall k \in T$ & ensures that each vertex is covered within the selected radius by at least one center \\
-$\sum\limits_{j \in M} y_j \leq p$ & & restricts the number of centers to at most p \\
-$\sum\limits_{k \in T} z_k = 1$ & & ensures that exactly one of the variables $z_k$ is selected as $1$ while the objective function determines the value $r_p(F)$ as the corresponding value $\rho_k$ \\
-$y_{j} \in \lbrace 0, 1\rbrace$ & $\forall j \in M$ & binary restriction \\
-$z_k \in \lbrace 0, 1\rbrace$ & $\forall k \in T$ & binary restriction 
+\begin{tabularx}{\textwidth}{l l X r}
+$\sum\limits_{j \in M} a_{ijk} y_j \geq z_k$ & $\forall i \in N, \forall k \in T$ & ensures that each vertex is covered within the selected radius by at least one center & (7)\\
+$\sum\limits_{j \in M} y_j \leq p$ & & restricts the number of centers to at most p & (8)\\
+$\sum\limits_{k \in T} z_k = 1$ & & ensures that exactly one of the variables $z_k$ is selected as $1$ while the objective function determines the value $r_p(F)$ as the corresponding value $\rho_k$ & (9)\\
+$y_{j} \in \lbrace 0, 1\rbrace$ & $\forall j \in M$ & binary restriction & (10)\\
+$z_k \in \lbrace 0, 1\rbrace$ & $\forall k \in T$ & binary restriction & (11)
 \end{tabularx}
