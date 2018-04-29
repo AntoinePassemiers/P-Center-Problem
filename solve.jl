@@ -47,7 +47,7 @@ function solve_p_center(parameters::Dict{String, Any})
         model, y = create_p1(distances, p, solver)
     elseif parameters["form"] == "p3"
         println("Using formulation p3")
-        model, y = create_p3(distances, p, solver)
+        model, y = create_p3(distances, p, solver, 8, typemax(Int64))
     else
         error("Formulation must be either p1 or p3")
     end
@@ -62,7 +62,7 @@ function solve_p_center(parameters::Dict{String, Any})
     println("Status    : $status")
     println("Solve time: $(@sprintf("%.3f", exectime)) s")
 
-    obj = getobjectivevalue(model)
+    obj = convert(Int64, round(getobjectivevalue(model)))
     println("Objective : $obj \n")
 
     # Create results folder if not exists
@@ -76,10 +76,11 @@ function solve_p_center(parameters::Dict{String, Any})
         parameters["form"], "_",
         parameters["solver"], ".txt")
     open(joinpath("results", results_path), "w") do f
+        write(f, "Execution time: $exectime \r\n\n")
         write(f, "Value of the objective function: $obj \r\n\n")
         for i=1:length(y)
             if getvalue(y[i]) > 0
-                write(f, "Center selected at area $i \r\n")
+                write(f, "- Center selected at area $i \r\n")
             end
         end
     end

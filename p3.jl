@@ -7,16 +7,19 @@ __precompile__()
 using JuMP
 
 
-function create_p3(d::Array{Array{Int64}}, p::Int64, solver::Any)
+function create_p3(d::Array{Array{Int64}}, p::Int64, solver::Any, LB::Int64, UB::Int64)
     model = Model(solver=solver)
 
     N::Int64 = length(d)    # Number of nodes
     M::Int64 = length(d[1]) # Number of possible centers
 
-    rho::Array{Int64} = unique([x for x in Iterators.flatten(d)])
+    # Flatten the distance matrix, keep only radii comprised between
+    # UB and LB, and sort the values
+    rho::Array{Int64} = unique([x for x in 
+        Iterators.filter(x->LB<=x<=UB, Iterators.flatten(d))])
     sort!(rho)
-    T::Int64 = length(rho)
 
+    T::Int64 = length(rho)
     a::Array{Int64} = Array{Int64}(N, M, T)
     for i = 1:N, j = 1:M, k = 1:T
         a[i, j, k] = (d[i][j] <= rho[k])

@@ -5,7 +5,7 @@
 include("solve.jl")
 
 
-EASY_ONLY = true
+EASY_ONLY = false
 
 
 function get_instance_filepaths(folder::AbstractString)
