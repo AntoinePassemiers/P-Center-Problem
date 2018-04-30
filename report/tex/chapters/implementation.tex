@@ -45,7 +45,8 @@ The project can be executed using two different scripts:
 	\item \verb+julia solve.jl+ is used with the following arguments:
 		\begin{itemize}
 		\item path to the instance file (required)
-		\item formulation of the p-center problem (either \verb+p1+, \verb+p3+, \verb+p3-binary+ or \verb+p3-db3+) (required)
+		\item formulation of the p-center problem (either \verb+p1+, \verb+p3+, \verb+p3-binary+ or \verb+p3-db3+) (required).
+		For formulation P3, you definitely want to use \verb+p3-db3+ since it is our fastest implementation of it.
 		\item solver (either \verb+cbc+ or \verb+glpk+) (optional, using \verb+--solver+)
 		\end{itemize}
 	For example: the following command
