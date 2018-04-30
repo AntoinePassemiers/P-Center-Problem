@@ -1,13 +1,17 @@
 *.aux
 *.toc
+*.bbl
+*.log
 *.synctex.gz
 *.out
+*.pdf
 
 *.py
 *.pyc
 *.pyd
 
 *.txt
+*.txt~
 
 results/
 
