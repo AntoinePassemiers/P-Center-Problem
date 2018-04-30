@@ -136,6 +136,8 @@ easy instances & 0.529 & & 0.058 & & 0.013 \\
 \end{tabular}
 \end{table*}\ \\\\
 \textbf{Important note:} unlike with Cbc, P1 forumulations of hard instances couldn't be solved in a reasonable time using GLPK
+
+\clearpage
 \newpage
 \chapter{Discussion}
 \section{Computation times}
@@ -159,7 +161,7 @@ yielding the same value of $z$ (in the case of P1) and more convex combinations 
 the same value of $\sum\limits_{k \in T} \rho_k z_k$. However, the differences in solutions between Cbc GLPK
 are hard to explain without some deep knowledge about their implementation. \\\\
 Furthermore, we observed that all solutions do not contain $p$ selected centers.
-For example, P3-BINARY selects 10 centers while P3-DB3 selects only 9 centers on instance \textit{easy/instance20_10_2} (Cbc).
+For example, P3-BINARY selects 10 centers while P3-DB3 selects only 9 centers on instance \textit{easy/instance20\_10\_2} (Cbc).
 For two solutions to the same problem instance, there is a unique common variable $z_k$ that is set to 1 since radius values are unique.
 Thus we have from constraint 7 that $\sum\limits_{j \in M} a_{ijk} y_j \geq 1$ & $\forall i \in N$ for that particular $k$.
 Thus there are multiple assignments of $y_j$ variables. Plus, the sum of $y_j$ values can be less than $p$ since $p$ is not evolved in the computation
@@ -167,8 +169,8 @@ of matrix $a$.
 
 \section{Bounds}
 To better illustrate the evolution of bounds across iterations, these two graphs hereunder plot respectively
-the search space for finding the low bound (BINARY) and the evolution of lower and upper bounds (DB3) when executing the algorithms on different instances.
-\begin{figure}[h!]
+the search space for finding the low bound (BINARY) and the evolution of lower and upper bounds (DB3) when executing the algorithms on different instances.\\\\
+\begin{figure}[H]
     \begin{center}
         \includegraphics[width=0.72\textwidth]{../imgs/binary_bounds.png}
         \caption{Search space of BINARY algorithm for finding the
@@ -180,7 +182,7 @@ BINARY requires 6 iterations in average to converge while DB3 requires 6 iterati
 This seemingly confirms the $\mathcal{O}\left( \log_2 K \right)$ complexity of the bisection search
 and the $\mathcal{O}(\log_3 T)$ complexity of DB3.
 
-\begin{figure}[h!]
+\begin{figure}[H]
     \begin{center}
         \includegraphics[width=0.72\textwidth]{../imgs/db3_bounds.png}
         \caption{Evolution of lower and upper bounds using DB3 \\
