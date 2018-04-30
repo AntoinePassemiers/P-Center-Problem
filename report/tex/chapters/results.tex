@@ -3,6 +3,9 @@
 
 These results were computed using the \verb+julia test_all.jl+ script which runs the two Cbc and GLPK solvers on all instances (30 easy instances and 10 hard instances) and writes the minimized objective function value and performance result of each instance in respective files in the \verb+results+ folder. For a better readability, we chose to make a separate result table per solver.
 
+We did not consider the results for P3 alone because it is not supposed to be run on the whole index set $T$.
+Also, it remains considerably slow on hard instances.
+
 \section{Cbc}
 
 \begin{table*}[h!]\centering
@@ -135,12 +138,25 @@ easy instances & 0.529 & & 0.058 & & 0.013 \\
 \textbf{Important note:} unlike with Cbc, P1 forumulations of hard instances couldn't be solved in a reasonable time using GLPK
 \newpage
 \chapter{Discussion}
-Regarding the results computed hereabove, we can observe that P1, P3 BINARY and P3 DB3 algorithms all reached the same (optimum) value for all instances. On the other hand, the computation time to reach an optimum solution varies significantly between the different algorithms, especially on the hard instances where P1, P3 BINARY and P3 DB3 report an average computation time (in seconds) of 284.553, 86.743 and 1.735 respectively. P3 DB3's performances seems to scale very well with the instances complexity.\\\\
-Regarding the details of the solutions reached by the P1, P3 BINARY and P3 DB3 algorithms, we can observe different behaviors depending on the solver used to solve the instance:
+\section{Computation times}
+Regarding the results computed hereabove, we can observe that P1, P3-BINARY and P3-DB3 algorithms all reached the same (optimum) value for all instances. On the other hand, the computation time to reach an optimum solution varies significantly between the different algorithms, especially on the hard instances where P1, P3 BINARY and P3 DB3 report an average computation time (in seconds) of 284.553, 86.743 and 1.735 respectively. P3 DB3's performances seems to scale very well with the instances complexity. \\\\
+We did not disable messages in standard output during solving because they are short and widely dispersed, and do not seem to affect the global execution time,
+given the execution times for P3-DB3 (GLPK) on easy instances.
+However, for all four algorithms (P1, P3, P3-BINARY and P3-DB3), execution time has been mesured as the total time elapsed after calling each of the algorithm,
+including modelling times and Julia array manipulation. As a result, an overhead of a few milliseconds may have affected solve time on some easy instances
+(particularly using GLPK and P3-DB3), but it remains negligible.
+
+\section{Solutions}
+Regarding the details of the solutions reached by the P1, P3-BINARY and P3-DB3 algorithms, we can observe different behaviors depending on the solver used to solve the instances:
 \begin{itemize}
-	\item Cbc: the locations of the selected \textit{p} centers are identical for the easy instances but different for the hard instances depending on the algorithm used to compute the solution.
-	\item GLPK: the locations of the selected \textit{p} centers are different for some of the easy instances depending on the algorithm used to compute the solution. Unfortunately, the behavior of GLPK on hard instances couldn't be verified because GLPK couldn't solve these instances in a reasonable time.
-\end{itemize}\ \\
+	\item Cbc: the locations of the selected \textit{p} centers are identical for the vast majority of the easy instances 
+    but different for the hard instances depending on the algorithm used to compute the solution.
+	\item GLPK: the locations of the selected \textit{p} centers are different for many of the easy instances depending on the algorithm used to compute the solution. Unfortunately, the behavior of GLPK on hard instances couldn't be verified because GLPK couldn't solve these instances in a reasonable time.
+\end{itemize}
+It is not surprising that many optimal solutions can be found for the same value of the objective function,
+since given distance matrices all contain a lot of distinct values, allowing more convex combinations of $d_{ij} \ \forall j$
+yielding the same value of $z$ (in the case of P1) and more convex combinations of $\rho_k \ \forall k$ yielding
+the same value of $\sum\limits_{k \in T} \rho_k z_k$. \\\\
 To better illustrate the application of the BINARY and DB3 algorithms' diagrams on concrete instances, these two graphs hereunder plot respectively the search space for finding the low bound (BINARY) and the evolution of lower and upper bounds (DB3) when executing the algorithms on different instances.
 \begin{figure}[h!]
     \begin{center}
