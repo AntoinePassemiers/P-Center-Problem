@@ -1,3 +1,9 @@
+*.aux
+*.log
+*.toc
+*.synctex.gz
+*.out
+
 *.py
 *.pyc
 *.pyd

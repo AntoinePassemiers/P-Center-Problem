@@ -21,19 +21,19 @@ where y[j] is a JuMP variable indicating whether center j is selected.
 """
 function formulation_3(p::Int64, solver::Any, rho::Array{Int64}, a::Array{Int64})
     model = Model(solver=solver)
-    N, M, T = size(a)
+    N, M, K = size(a)
 
     # Define variables
     @variables model begin
         y[1:M], Bin
-        z[1:T], Bin
+        z[1:K], Bin
     end
 
     # Define objective function
-    @objective(model, Min, sum(rho[k]*z[k] for k=1:T))
+    @objective(model, Min, sum(rho[k]*z[k] for k=1:K))
 
     # Define constraints
-    for i = 1:N, k = 1:T
+    for i = 1:N, k = 1:K
         # Constraints group 15
         #    sum_j a[i, j, k]*y[j] >= z[k]
         #    For each selected vertex, there is at least 
@@ -47,7 +47,7 @@ function formulation_3(p::Int64, solver::Any, rho::Array{Int64}, a::Array{Int64}
     # Constraint 17
     #    sum_k z[k] == 1
     #    Exactly one distance D[k] is selected
-    @constraint(model, sum(z[k] for k=1:T) == 1)
+    @constraint(model, sum(z[k] for k=1:K) == 1)
     return model, y
 end
 
@@ -71,10 +71,10 @@ function create_rph(p::Int64,
                     a::Array{Int64},
                     h::Int64)
     model = Model(solver=solver)
-    N, M, T = size(a)
+    N, M, K = size(a)
 
     # Set all variables z[k] to 0 except for k == h
-    z::Array{Int64} = zeros(Int64, T)
+    z::Array{Int64} = zeros(Int64, K)
     z[h] = 1
 
     # Define variables
@@ -84,7 +84,7 @@ function create_rph(p::Int64,
     end
 
     # Define objective function
-    @objective(model, Min, sum(rho[k]*z[k] for k=1:T))
+    @objective(model, Min, sum(rho[k]*z[k] for k=1:K))
 
     # Define constraints
     for i = 1:N
@@ -98,7 +98,6 @@ function create_rph(p::Int64,
     #    There are at most p selected centers
     #    Same constraint as constraint 16
     @constraint(model, sum(y[j] for j=1:M) <= p)
-
     return model
 end
 
@@ -122,14 +121,14 @@ function get_p3_constants(d::Array{Array{Int64}})
 
     N::Int64 = length(d)    # Number of nodes
     M::Int64 = length(d[1]) # Number of possible centers
-    T::Int64 = length(rho)  # Number of radius values
+    K::Int64 = length(rho)  # Number of radius values
 
     # Compute matrix a
-    a::Array{Int64} = Array{Int64}(N, M, T)
-    for i = 1:N, j = 1:M, k = 1:T
+    a::Array{Int64} = Array{Int64}(N, M, K)
+    for i = 1:N, j = 1:M, k = 1:K
         a[i, j, k] = (d[i][j] <= rho[k])
     end
-    return N, M, T, rho, a
+    return N, M, K, rho, a
 end
 
 
@@ -148,7 +147,7 @@ Return the model, the array y of variables and the solve status.
 """
 function solve_p3(d::Array{Array{Int64}}, p::Int64, solver::Any)
     # Compute matrix a and get unique radius values in ascending order
-    N, M, T, rho, a = get_p3_constants(d)
+    N, M, K, rho, a = get_p3_constants(d)
 
     # Create model P3 and solve it
     model, y = formulation_3(p, solver, rho, a)
@@ -173,7 +172,7 @@ Return the model, the array y of variables and the solve status.
 """
 function solve_p3_with_BINARY(d::Array{Array{Int64}}, p::Int64, solver::Any)
     # Compute matrix a and get unique radius values in ascending order
-    N, M, T, rho, a = get_p3_constants(d)
+    N, M, K, rho, a = get_p3_constants(d)
 
     pretty_print = (lb, minh, maxh) -> println(
         "    ", if (LB == typemax(Int64)) " " else "*" end,
@@ -183,7 +182,7 @@ function solve_p3_with_BINARY(d::Array{Array{Int64}}, p::Int64, solver::Any)
 
     # Apply BINARY algorithm to find a good lower bound
     min_h::Int64 = 1
-    max_h::Int64 = T
+    max_h::Int64 = K
     LB::Int64 = typemax(Int64) # LB = Infinity
     println("Processing best lower bound...")
     pretty_print(LB, min_h, max_h)
@@ -207,7 +206,7 @@ function solve_p3_with_BINARY(d::Array{Array{Int64}}, p::Int64, solver::Any)
 
     # Remove all radius values below LB from the search space
     # and solve P3
-    model, y = formulation_3(p, solver, rho[max_h:T], a[:, :, max_h:T])
+    model, y = formulation_3(p, solver, rho[max_h:K], a[:, :, max_h:K])
     println("Solving original problem (LB = $LB)...")
     status = solve(model)
     return model, y, status
@@ -229,7 +228,7 @@ Return the model, the array y of variables and the solve status.
 """
 function solve_p3_with_DB3(d::Array{Array{Int64}}, p::Int64, solver::Any)
     # Compute matrix a and get unique radius values in ascending order
-    N, M, T, rho, a = get_p3_constants(d)
+    N, M, K, rho, a = get_p3_constants(d)
 
     pretty_print = (lb, ah, bh, ub) -> println(
         "    ",
@@ -239,18 +238,18 @@ function solve_p3_with_DB3(d::Array{Array{Int64}}, p::Int64, solver::Any)
         "UB : ", rpad(ub, 5, " "))
 
     # Apply DB3 algorithm
-    _min::Int64, _max::Int64 = 1, T
+    _min::Int64, _max::Int64 = 1, K
     println("Tightening bounds...")
     while _max - _min >= 1
         _a::Int64 = _min + convert(Int64, floor((_max - _min) / 3))
         _b::Int64 = _min + 2 * convert(Int64, floor((_max - _min) / 3))
         pretty_print(_min, _a, _b, _max)
-        model, _ = formulation_3(p, solver, rho[[_a, _b]], a[:, :, [_a, _b]])
-        status = solve(model, suppress_warnings=true)
+        P_S, _ = formulation_3(p, solver, rho[[_a, _b]], a[:, :, [_a, _b]])
+        status = solve(P_S, suppress_warnings=true)
         if status == :Infeasible
             _min = _b + 1
         else
-            obj = convert(Int64, round(getobjectivevalue(model)))
+            obj = convert(Int64, round(getobjectivevalue(P_S)))
             if obj == rho[_a]
                 _max = _a
             elseif obj == rho[_b]
