@@ -34,6 +34,9 @@ The BINARY algorithm proposed by Calik and Tansel (2013) can be schematized as f
 \noindent Applying a bisection search on the objective function of the linear relaxation comes to the same as applying a bisection search
 on the objective function of the original problem. Indeed, an integer problem is infeasible if there is an infeasible relaxation of this problem.
 Thus, the algorithm stops once the feasible solution with the lowest value of the objective has been found. \\\\
+In our actual implementation we stop iterating once $max - min < 2$ because we consider that solving the primal problem for two indices from $T$ is faster
+than running an additional linear relaxation before running the primal on a unique index $mid$.
+This idea is also inspired by DB algorithms described in next section.\\\\
 The main defect of this method is that it cannot be used alone, since it does not provide any upper bound.
 Instead of combining BINARY with another technique for finding $UB$, we decided to implement one of the
 double bound (DB) methods for the purpose of diversification among the algorithms discussed.
