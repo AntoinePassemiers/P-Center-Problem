@@ -25,10 +25,10 @@ Let:
 \end{itemize}\ \\
 Calik and Tansel (2013) proposes and proves that val($RP3$)$ = \min_{h \in T}$ val($RP_h$). They show that computing $\min_{h \in T}$ val($RP_h$) is achieved in polynomial time by solving $\mathcal{O}\left( \log_2 K \right)$ linear programs $RP_h$ for each $\rho_h$ selected from the set of ordered $\rho$ values $R = \lbrace \rho_1, \rho_2, ..., \rho_K \rbrace$ (as defined in P3) during a binary seach.\\\\
 The BINARY algorithm proposed by Calik and Tansel (2013) can be schematized as follows:
-\begin{figure}[H]
+\begin{figure}[h!]
 	\begin{center}
-		\includegraphics[width=\textwidth]{../imgs/BINARY.png}
-		\caption{Flow chart of BINARY algorithm}
+		\includegraphics[width=\textwidth]{../imgs/BINARY.png}\\
+		Flow chart of BINARY algorithm
 	\end{center}
 \end{figure}
 \noindent Applying a bisection search on the objective function of the linear relaxation comes to the same as applying a bisection search
@@ -64,9 +64,9 @@ As a result, $P(S)$ may be infeasible for a certain set $S$ in exactly the same 
 For that reason, we set $min = b + 1$ if $P(S)$ is feasible, since both $a$ and $b$ would have led to an infeasible solution in BINARY algorithm.
 In other words, all radius values less or equal to $\rho_b$ (> $\rho_a$) are discarded from the search space.
 The double bound algorithm proposed by Calik and Tansel (2013) can now be schematized as follows:
-\begin{figure}[H]
+\begin{figure}[h!]
 	\begin{center}
-		\includegraphics[width=\textwidth]{../imgs/DB3.png}
-		\caption{Modified flow chart of DB3 algorithm}
+		\includegraphics[width=\textwidth]{../imgs/DB3.png}\\
+		Modified flow chart of DB3 algorithm
 	\end{center}
 \end{figure}

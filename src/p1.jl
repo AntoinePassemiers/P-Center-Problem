@@ -6,7 +6,6 @@ __precompile__()
 
 using JuMP
 
-
 """
     solve_p1(d, p, solver)
 
@@ -51,6 +50,7 @@ function solve_p1(d::Array{Array{Int64}}, p::Int64, solver::Any)
             @constraint(model, x[i, j] <= y[j])
         end
     end
+    
     # Constraint 5: sum_j (y_j) <= p
     #    There are at most p centers.
     @constraint(model, sum(y) <= p)

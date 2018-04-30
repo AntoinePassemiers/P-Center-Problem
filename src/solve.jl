@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# main.jl
+# solve.jl
 # authors : Antoine Passemiers, Cedric Simar
 
 __precompile__()

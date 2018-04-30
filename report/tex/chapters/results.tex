@@ -34,11 +34,6 @@ instance20\_2\_2.dat & 53 & 1.570 & & 53 & 1.249 & & 53 & 0.136 \\
 instance20\_2\_3.dat & 55 & 1.312 & & 55 & 0.365 & & 55 & 0.121 \\
 instance20\_2\_4.dat & 51 & 1.163 & & 51 & 0.163 & & 51 & 0.166 \\
 instance20\_2\_5.dat & 55 & 1.333 & & 55 & 0.920 & & 55 & 0.104 \\
-instance20\_4\_1.dat & 21 & 0.260 & & 21 & 0.311 & & 21 & 0.043 \\
-instance20\_4\_2.dat & 24 & 0.327 & & 24 & 0.061 & & 24 & 0.053 \\
-instance20\_4\_3.dat & 23 & 0.261 & & 23 & 0.067 & & 23 & 0.088 \\
-instance20\_4\_4.dat & 17 & 0.448 & & 17 & 0.074 & & 17 & 0.096 \\
-instance20\_4\_5.dat & 22 & 0.342 & & 22 & 0.524 & & 22 & 0.080 \\
 \end{tabular}
 \end{table*}
 \newpage
@@ -48,6 +43,11 @@ instance20\_4\_5.dat & 22 & 0.342 & & 22 & 0.524 & & 22 & 0.080 \\
 & \multicolumn{2}{c}{P1} & \phantom{abc} & \multicolumn{2}{c}{P3 BIN} & \phantom{abc} & \multicolumn{2}{c}{P3 DB3}\\
 \cmidrule{2-3} \cmidrule{5-6} \cmidrule{8-9}
 & Obj & Time(s) & & Obj & Time(s) & & Obj & Time(s)\\ \midrule
+instance20\_4\_1.dat & 21 & 0.260 & & 21 & 0.311 & & 21 & 0.043 \\
+instance20\_4\_2.dat & 24 & 0.327 & & 24 & 0.061 & & 24 & 0.053 \\
+instance20\_4\_3.dat & 23 & 0.261 & & 23 & 0.067 & & 23 & 0.088 \\
+instance20\_4\_4.dat & 17 & 0.448 & & 17 & 0.074 & & 17 & 0.096 \\
+instance20\_4\_5.dat & 22 & 0.342 & & 22 & 0.524 & & 22 & 0.080 \\
 instance20\_10\_1.dat & 3 & 0.046 & & 3 & 0.863 & & 3 & 0.057 \\
 instance20\_10\_2.dat & 4 & 0.152 & & 4 & 0.892 & & 4 & 0.026 \\
 instance20\_10\_3.dat & 7 & 0.235 & & 7 & 0.874 & & 7 & 0.029 \\
@@ -163,29 +163,25 @@ are hard to explain without some deep knowledge about their implementation. \\\\
 Furthermore, we observed that all solutions do not contain $p$ selected centers.
 For example, P3-BINARY selects 10 centers while P3-DB3 selects only 9 centers on instance \textit{easy/instance20\_10\_2} (Cbc).
 For two solutions to the same problem instance, there is a unique common variable $z_k$ that is set to 1 since radius values are unique.
-Thus we have from constraint 7 that $\sum\limits_{j \in M} a_{ijk} y_j \geq 1$ & $\forall i \in N$ for that particular $k$.
+Thus we have from constraint 7 that $\sum\limits_{j \in M} a_{ijk} y_j \geq 1 \forall i \in N$ for that particular $k$.
 Thus there are multiple assignments of $y_j$ variables. Plus, the sum of $y_j$ values can be less than $p$ since $p$ is not evolved in the computation
 of matrix $a$.
 
 \section{Bounds}
 To better illustrate the evolution of bounds across iterations, these two graphs hereunder plot respectively
-the search space for finding the low bound (BINARY) and the evolution of lower and upper bounds (DB3) when executing the algorithms on different instances.\\\\
-\begin{figure}[H]
+the search space for finding the low bound (BINARY) and the evolution of lower and upper bounds (DB3) when executing the algorithms on different instances.
+\begin{figure}[h!]
     \begin{center}
-        \includegraphics[width=0.72\textwidth]{../imgs/binary_bounds.png}
-        \caption{Search space of BINARY algorithm for finding the
-        lower bound \\ on easy/instance10\_1\_1.dat}
+        \includegraphics[width=0.68\textwidth]{../imgs/binary_bounds.png}\\
+        Search space of BINARY algorithm for finding the lower bound \\ on easy/instance10\_1\_1.dat
     \end{center}
-\end{figure}
-
+\end{figure}\ \\
 BINARY requires 6 iterations in average to converge while DB3 requires 6 iterations in average.
 This seemingly confirms the $\mathcal{O}\left( \log_2 K \right)$ complexity of the bisection search
 and the $\mathcal{O}(\log_3 T)$ complexity of DB3.
-
-\begin{figure}[H]
+\begin{figure}[h!]
     \begin{center}
-        \includegraphics[width=0.72\textwidth]{../imgs/db3_bounds.png}
-        \caption{Evolution of lower and upper bounds using DB3 \\
-        algorithm on instance hard/instance9.dat}
+        \includegraphics[width=0.68\textwidth]{../imgs/db3_bounds.png}\\
+        Evolution of lower and upper bounds using DB3 \\ algorithm on instance hard/instance9.dat
     \end{center}
 \end{figure}
