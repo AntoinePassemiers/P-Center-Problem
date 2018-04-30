@@ -152,6 +152,8 @@ easy instances & 0.529 & & 0.058 & & 0.013 \\
 \bottomrule
 \end{tabular}
 \end{table*}\ \\\\
-\textbf{Note:} unlike with Cbc, P1 forumulations of hard instances couldn't be solved in a reasonable time using GLPK
+\textbf{Important note:} unlike with Cbc, P1 forumulations of hard instances couldn't be solved in a reasonable time using GLPK
 \newpage
 \chapter{Discussion}
+Regarding the results computed hereabove, we can observe that P1, P3 BINARY and P3 DB3 algorithms all reached the same (optimum) value for all instances. On the other hand, the computation time to reach an optimum solution varies significantly between the different algorithms, especially on the hard instances where P1, P3 BINARY and P3 DB3 report an average computation time (in seconds) of 284.553, 86.743 and 1.735 respectively. P3 DB3's performances seems to scale very well with the instances complexity.
+Regarding the details of the solutions reached by the P1, P3 BINARY and P3 DB3 algorithms, we can observe that the locations of the selected \textit{p} centers are identical for the easy instances but different for the hard instances depending on the algorithm used to compute the solution.
