@@ -5,9 +5,9 @@
 include("solve.jl")
 
 
-implementations = ["p1", "p3", "p3-binary", "p3-db3"]
+implementations = ["p1", "p3-binary", "p3-db3"]
 solvers = ["cbc", "glpk"]
-EASY_ONLY = true
+EASY_ONLY = false
 
 
 function get_instance_filepaths(folder::AbstractString)
