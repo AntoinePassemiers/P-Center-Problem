@@ -3,6 +3,26 @@
 
 These results were computed using the \verb+julia test_all.jl+ script which runs the two Cbc and GLPK solvers on all instances (30 easy instances and 10 hard instances) and writes the minimized objective function value and performance result of each instance in respective files in the \verb+results+ folder. For a better readability, we chose to make a separate result table per solver.
 
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=0.72\textwidth]{../imgs/binary_bounds.png}
+        \caption{Search space of BINARY algorithm for finding the
+        lower bound \\ on easy/instance10\_1\_1.dat}
+    \end{center}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=0.72\textwidth]{../imgs/db3_bounds.png}
+        \caption{Evolution of lower and upper bounds using DB3 \\
+        algorithm on instance hard/instance9.dat}
+    \end{center}
+\end{figure}
+
+\chapter{Discussion}
+
+
 \section{Cbc}
 
 \begin{table*}[h!]\centering
