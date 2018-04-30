@@ -18,7 +18,11 @@ $ julia solve.jl <path-to-instance> <form> [--solver SOLVER]
 ```
 
 form must be either "p1", "p3", "p3-binary" or "p3-db3".
-solver can be either "cbc" or "glpk" (default value is "cbc")
+solver can be either "cbc" or "glpk" (default value is "cbc").
+
+The script will create a folder "results" in current directory
+and write the results for given formulation, instance and solver
+in a txt file.
 
 ### Run formulation P1 the fastest way
 
