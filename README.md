@@ -10,11 +10,11 @@ The BINARY and DB3 algorithms from the same paper have been implemented in order
 
 ### BINARY algorithm
 
-![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/doc/report/imgs/binary_bounds.png)
+![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/report/imgs/binary_bounds.png)
 
 ### DB3 algorithm
 
-![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/doc/report/imgs/db3_bounds.png)
+![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/report/imgs/db3_bounds.png)
 
 
 ## Dependencies
