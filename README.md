@@ -8,6 +8,14 @@ The BINARY and DB3 algorithms from the same paper have been implemented in order
 
 ## Finding bounds for the P3 formulation
 
+### Lower bound with BINARY
+
+![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/report/imgs/BINARY.png)
+
+### Lower and upper bounds with DB3
+
+![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/report/imgs/DB3.png)
+
 ![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/report/imgs/bounds.png)
 
 
