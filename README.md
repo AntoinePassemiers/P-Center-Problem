@@ -6,6 +6,17 @@ Res 40:2991–2999
 
 The BINARY and DB3 algorithms from the same paper have been implemented in order to solve P3 efficiently.
 
+## Finding bounds for the P3 formulation
+
+### BINARY algorithm
+
+![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/doc/report/imgs/binary_bounds.png)
+
+### DB3 algorithm
+
+![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/doc/report/imgs/db3_bounds.png)
+
+
 ## Dependencies
 
 ```julia
