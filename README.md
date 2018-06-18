@@ -10,13 +10,13 @@ The BINARY and DB3 algorithms from the same paper have been implemented in order
 
 ### Lower bound with BINARY
 
-![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/report/imgs/BINARY.png)
+![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/doc/imgs/BINARY.png)
 
 ### Lower and upper bounds with DB3
 
-![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/report/imgs/DB3.png)
+![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/doc/imgs/DB3.png)
 
-![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/report/imgs/bounds.png)
+![alt text](https://raw.githubusercontent.com/AntoinePassemiers/P-Center-Problem/master/doc/imgs/bounds.png)
 
 
 ## Dependencies
