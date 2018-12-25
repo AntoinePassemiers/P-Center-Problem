@@ -1,0 +1,64 @@
+\newpage
+\chapter{Implementation and command line usage}
+
+The project was implemented exclusively in Julia v0.6.2, a high-level dynamic programming language as requested in the assignment guidelines. In addition to the requested default use of the open-source Coin-OR Branch-and-Cut solver (Cbc), our implementation also offers the possibility to compare the results and performance of Cbc with the GNU Linear Programming Kit (GLPK), another solver interfaced by JuMP.
+
+\section{Project Structure}
+
+The source folder of the project is structured as follows:
+\begin{itemize}
+\item the \verb+instances+ folder contains:
+	\begin{itemize}
+	\item a folder \verb+easy+ containing the easy instances provided with the assignment
+	\item a folder \verb+hard+ containing the hard instances provided with the assignment
+	\end{itemize}
+\item the \verb+report+ folder contains the report in pdf and LaTeX formats
+\item the \verb+results+ folder contains the results (objective and elapsed time) of the program execution on the selected instances.
+Each \verb+txt+ file contains solver name, algorithm/formulation name,
+solution found by the solver (values of the \textit{y} variables),
+value of the objective function and elapsed time.
+\item the \verb+src+ folder contains the source files in Julia
+	\begin{itemize}
+	\item \verb+p1.jl+ implementation of P1 formulation
+	\item \verb+p3.jl+ implementation of P3 and P(S) formulations,
+	BINARY and double bound (DB3) algorithm
+	\item \verb+solve.jl+ run p-center solver with command-line arguments
+	\item \verb+test_all.jl+ run p-center solver for all solvers and algorithms on all instances. This has been principally used
+	to produce the results shown in present report
+	\end{itemize}
+\end{itemize}
+
+\section{Execution}
+
+\subsection{Extra modules}
+In order to properly run the project, several modules have first to be installed using the following commands in a Julia environment:
+\begin{itemize}
+	\item \verb+Pkg.add("ArgParse")+
+	\item \verb+Pkg.add("Cbc")+
+	\item \verb+Pkg.add("GLPKMathProgInterface")+
+	\item \verb+Pkg.add("JuMP")+
+\end{itemize}
+
+\subsection{Arguments}
+The project can be executed using two different scripts:
+\begin{itemize}
+	\item \verb+julia solve.jl+ is used with the following arguments:
+		\begin{itemize}
+		\item path to the instance file (required)
+		\item formulation of the p-center problem (either \verb+p1+, \verb+p3+, \verb+p3-binary+ or \verb+p3-db3+) (required).
+		For formulation P3, you definitely want to use \verb+p3-db3+ since it is our fastest implementation of it.
+		\item solver (either \verb+cbc+ or \verb+glpk+) (optional, using \verb+--solver+)
+		\end{itemize}
+	For example: the following command
+	\begin{center}
+		\verb+julia solve.jl ./instances/easy/instance10_1_1.dat p1 --solver glpk+
+	\end{center}	 
+	runs the \verb+solve.jl+ script to solve a unique instance \verb+instance10_1_1.dat+ using the GLPK solver with the P1 formulation. 
+	\item \verb+julia test_all.jl+ is used without argument, runs the two Cbc and GLPK solvers on all instances and writes the minimized objective function value and performance result of each instance in respective files in the \verb+results+ folder.
+	\item Because running both solvers on all instances for each algorithm can be very time-consuming, as well as calling
+	the solver with command-line arguments many times in a row (because of the very long
+	Julia warm up time), you may prefer to automate runs youself.
+	If that is the case, just import \verb+solve.jl+ and call
+	\verb+solve_p_center(parameters::Dict{String, Any})+ with proper
+	parameters. Everything is documented in docstrings.
+\end{itemize}
